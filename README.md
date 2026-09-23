@@ -2,54 +2,49 @@
 
 A simple and extensible command-line tool written in Rust to determine which named time period (like "Mother's Day" or "Easter") a given date falls into, based on configurable YAML definitions.
 
-## ✨ Features
+## Features
 
-- ✅ Supports flexible date definitions like:
+- Supports flexible date definitions like:
   - `The second Sunday of May`
-  - `Easter`, `Thanksgiving`, `LaborDay`, `MLKDay`, etc.
-- ✅ Configurable `days_before` and `days_after` buffer windows.
-- ✅ System and user configuration file support with merging.
-- ✅ Command-line override of the date to test.
-- ✅ Generates a default config file if none exists.
+  - `Easter`, `Thanksgiving`, `LaborDay`, `MemorialDay`, `MLKDay`
+- Configurable `DaysBefore` and `DaysAfter` buffer windows
+- All matching periods are output, space-separated (e.g. `MothersDay EasterPeriod`)
+- System (`/etc`) and user (`~/.config`) config files, merged at runtime
+- Command-line override of the date being tested
+- Auto-generates a default user config on first run; `--init` to force-regenerate
 
-## 📦 Installation
+## Installation
 
 ### Prerequisites
-- [Rust](https://www.rust-lang.org/tools/install) (version 1.70+ recommended)
 
-### Clone and build:
+- [Rust](https://www.rust-lang.org/tools/install) 1.88 or later
+
+### Clone and build
 
 ```bash
-git clone https://github.com/yourusername/NameTimePeriod.git
-cd NameTimePeriod
+git clone https://github.com/rickprice/NameTimePeriods.git
+cd NameTimePeriods
 cargo build --release
 ```
 
-### Or run with `rust-script`:
+## Usage
 
 ```bash
-cargo install rust-script
-rust-script src/main.rs
+name_time_period                    # check today's date
+name_time_period --date 2025-05-11  # check a specific date
+name_time_period --init             # force-(re)create user config
 ```
 
-## 🚀 Usage
+## Configuration
 
-```bash
-name_time_period              # Checks today's date
-name_time_period --date 2025-05-11
-name_time_period --init      # Force (re)create user config
-```
+### Config file locations
 
-## 🔧 Configuration
+| Priority | Path |
+|----------|------|
+| User (checked first) | `~/.config/NameTimePeriod/time_periods.yaml` |
+| System | `/etc/NameTimePeriod/time_periods.yaml` |
 
-### System Config
-
-- `/etc/NameTimePeriod/time_periods.yaml` (global, optional)
-
-### User Config
-
-- `~/.config/NameTimePeriod/time_periods.yaml`
-- Created automatically on first run or with `--init`
+Both files are loaded and merged. The user config is created automatically on first run if neither file exists.
 
 ### Example `time_periods.yaml`
 
@@ -64,38 +59,48 @@ TimePeriods:
       Date: Easter
       DaysBefore: 5
       DaysAfter: 2
+  - Christmas:
+      Date: December 25
+      DaysBefore: 3
+      DaysAfter: 1
 ```
 
-> Entries are evaluated **in order**, and the first match wins.
+### Supported `Date` values
 
-## 🧪 Running Tests
+| Value | Meaning |
+|-------|---------|
+| `Easter` | Western Easter Sunday (anonymous Gregorian algorithm) |
+| `Thanksgiving` | 4th Thursday of November |
+| `LaborDay` | 1st Monday of September |
+| `MemorialDay` | Last Monday of May |
+| `MLKDay` | 3rd Monday of January |
+| `The N Weekday of Month` | e.g. `The second Sunday of May` |
+| `Month DD` | e.g. `December 25` |
+
+## Running Tests
 
 ```bash
 cargo test
 ```
 
-## 📁 Directory Structure
+The test suite covers Easter calculations across multiple years, all weekday/ordinal
+combinations, boundary conditions for period matching, and YAML deserialization.
 
-```
-NameTimePeriod/
-├── src/
-│   └── main.rs         # Main logic
-├── Cargo.toml
-└── README.md
-```
+## FAQ
 
-## 🙋 FAQ
-
-**Q: What happens if the same key appears in both system and user configs?**  
-A: The user config takes precedence and overrides the system config for that entry.
+**Q: What if today matches more than one period?**  
+A: All matching period names are printed, space-separated. Output `Default` if nothing matches.
 
 **Q: Can I define custom holidays?**  
-A: Yes! Just add them to the YAML using a flexible date or standard date format.
+A: Yes — add them to your user YAML using any supported date format.
 
-## 📜 License
+**Q: What if the same entry appears in both config files?**  
+A: Both are loaded; if they both match, both names appear in the output.
 
-MIT License. See `LICENSE` for details.
+## License
 
-## ✍️ Author
+MIT — see `LICENSE` for details.
+
+## Author
 
 Frederick Price

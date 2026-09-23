@@ -1,11 +1,5 @@
 ---
 TimePeriods:
-  - TestingToday:
-      Date: May 9
-      DaysBefore: 10
-      DaysAfter: 10
-      Comment: Testing
-
   - MothersDay:
       Date: May 11
       DaysBefore: 7
@@ -30,9 +24,9 @@ TimePeriods:
       DaysBefore: 0
       DaysAfter: 90
   - Summer:
-      Date: June 20
+      Date: June 1
       DaysBefore: 0
-      DaysAfter: 90
+      DaysAfter: 100
   - Fall:
       Date: September 1
       DaysBefore: 0
