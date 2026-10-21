@@ -1,6 +1,6 @@
 [package]
 name = "name_time_period"
-version = "0.4.0"
+version = "0.4.1"
 authors = ["Frederick Price <fprice@pricemail.ca>"]
 edition = "2024"
 license = "MIT"

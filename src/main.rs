@@ -13,7 +13,7 @@ use std::sync::LazyLock;
 #[derive(Parser)]
 #[command(name = "TimePeriodChecker")]
 #[command(author = "Frederick Price")]
-#[command(version = "1.0")]
+#[command(version)]
 #[command(about = "Checks what time period a date falls into based on YAML configs", long_about = None)]
 struct Cli {
     /// Pass a specific date to evaluate (format: YYYY-MM-DD)
